@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "743457403104",
+    "project_id": "party-finder-66bd9",
+    "storage_bucket": "party-finder-66bd9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:743457403104:android:ba875adba45f7ccce92085",
+        "android_client_info": {
+          "package_name": "com.example.partyfinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "743457403104-rc9hihs8qiktarrlo80ne86thvgt77oo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.partyfinder",
+            "certificate_hash": "10a62e830ea8d3c1a0c70f361aa4f318cfaa2cb9"
+          }
+        },
+        {
+          "client_id": "743457403104-8b15ghmu23oi9dn11mcc7h6qesm78tpd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXM4ghNFs9HC1MqR0eMrmKd0r4uCXcs0Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "743457403104-8b15ghmu23oi9dn11mcc7h6qesm78tpd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
