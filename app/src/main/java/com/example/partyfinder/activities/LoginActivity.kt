@@ -1,10 +1,10 @@
 package com.example.partyfinder.activities
 
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Activity
 import android.os.Bundle
 import com.example.partyfinder.R
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
