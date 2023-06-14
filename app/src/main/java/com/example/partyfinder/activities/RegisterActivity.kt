@@ -6,20 +6,21 @@ import android.os.Bundle
 import com.example.partyfinder.R
 import com.example.partyfinder.utils.CustomTextViewBold
 
-class LoginActivity : Activity() {
+class RegisterActivity : Activity() {
 
-    private lateinit var tvRegister : CustomTextViewBold
+    private lateinit var tvLogin : CustomTextViewBold
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_register)
 
-        tvRegister = findViewById(R.id.tv_register)
+        tvLogin = findViewById(R.id.tv_login)
 
-        tvRegister.setOnClickListener {
+        tvLogin.setOnClickListener {
 
-            val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+            val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 }
