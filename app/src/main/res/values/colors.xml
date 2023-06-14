@@ -3,6 +3,9 @@
     <color name="colorBlack">#FF000000</color>
     <color name="colorWhite">#FFFFFFFF</color>
 
+    <color name="colorBlackFaded">#80000000</color>
+    <color name="colorBlackFadedExtra">#40000000</color>
+
     <color name="colorPrimary">#BA1919</color>
     <color name="colorAccent">#BA1919</color>
 
