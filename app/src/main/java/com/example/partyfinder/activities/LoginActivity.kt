@@ -1,14 +1,14 @@
 package com.example.partyfinder.activities
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.VideoView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.partyfinder.R
 import com.example.partyfinder.utils.CustomTextViewBold
 
-class LoginActivity : Activity() {
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var tvRegister : CustomTextViewBold
     private lateinit var vvLogin: VideoView

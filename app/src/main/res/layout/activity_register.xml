@@ -11,7 +11,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_register_activity"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -32,6 +32,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_register_activity">
@@ -166,7 +167,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
-                android:id="@+id/ll_terms_and_condition"
+                android:id="@+id/ll_terms_and_conditions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
@@ -177,13 +178,13 @@
                 app:layout_constraintTop_toBottomOf="@id/til_confirm_password">
 
                 <CheckBox
-                    android:id="@+id/cb_terms_and_condition"
+                    android:id="@+id/cb_terms_and_conditions"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"/>
 
                 <com.example.partyfinder.utils.CustomTextView
-                    android:id="@+id/tv_terms_condition"
+                    android:id="@+id/tv_terms_conditions"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/txt_terms_condition_marginStart"
@@ -211,7 +212,7 @@
                 android:textSize="@dimen/btn_textSize"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ll_terms_and_condition"/>
+                app:layout_constraintTop_toBottomOf="@id/ll_terms_and_conditions"/>
 
             <LinearLayout
                 android:id="@+id/ll_already_have_an_account"
