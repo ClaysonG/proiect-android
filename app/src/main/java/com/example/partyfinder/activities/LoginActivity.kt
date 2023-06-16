@@ -3,15 +3,24 @@ package com.example.partyfinder.activities
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
+import android.view.View
 import android.widget.VideoView
-import androidx.appcompat.app.AppCompatActivity
 import com.example.partyfinder.R
+import com.example.partyfinder.utils.CustomButton
+import com.example.partyfinder.utils.CustomEditText
+import com.example.partyfinder.utils.CustomTextView
 import com.example.partyfinder.utils.CustomTextViewBold
+import com.google.firebase.auth.FirebaseAuth
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity(), View.OnClickListener {
 
     private lateinit var tvRegister : CustomTextViewBold
     private lateinit var vvLogin: VideoView
+    private lateinit var etEmail: CustomEditText
+    private lateinit var etPassword: CustomEditText
+    private lateinit var tvForgotPassword: CustomTextView
+    private lateinit var btnLogin: CustomButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,12 +28,19 @@ class LoginActivity : AppCompatActivity() {
 
         tvRegister = findViewById(R.id.tv_register)
         vvLogin = findViewById(R.id.vv_login)
+        etEmail = findViewById(R.id.et_email)
+        etPassword = findViewById(R.id.et_password)
+        tvForgotPassword = findViewById(R.id.tv_forgot_password)
+        btnLogin = findViewById(R.id.btn_login)
 
-        tvRegister.setOnClickListener {
+        tvForgotPassword.setOnClickListener(this)
+        btnLogin.setOnClickListener(this)
+        tvRegister.setOnClickListener(this)
 
-            val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
-            startActivity(intent)
-        }
+        loadVideo()
+    }
+
+    private fun loadVideo() {
 
         val videoPath = "android.resource://" + packageName + "/" + R.raw.party
         vvLogin.setVideoURI(Uri.parse(videoPath))
@@ -69,5 +85,78 @@ class LoginActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         vvLogin.stopPlayback()
+    }
+
+    override fun onClick(view: View?) {
+
+        if (view != null) {
+            when (view.id) {
+
+                R.id.tv_forgot_password -> {
+
+                    val intent = Intent(this@LoginActivity, ForgotPasswordActivity::class.java)
+                    startActivity(intent)
+                }
+
+                R.id.btn_login -> {
+
+                    loginRegisteredUser()
+                }
+
+                R.id.tv_register -> {
+
+                    val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+        }
+    }
+
+    private fun validateLoginDetails(): Boolean {
+
+        return when {
+            TextUtils.isEmpty(etEmail.text.toString().trim { it <= ' ' }) -> {
+                showErrorSnackBar(resources.getString(R.string.err_msg_enter_email), true)
+                false
+            }
+            TextUtils.isEmpty(etPassword.text.toString().trim { it <= ' ' }) -> {
+                showErrorSnackBar(resources.getString(R.string.err_msg_enter_password), true)
+                false
+            }
+            else -> {
+                // showErrorSnackBar("Your input is valid.", false)
+                true
+            }
+        }
+    }
+
+    private fun loginRegisteredUser() {
+
+        if (validateLoginDetails()) {
+
+            // Show the progress dialog.
+            showProgressDialog(resources.getString(R.string.please_wait))
+
+            // Get the text from editText and trim the space
+            val email = etEmail.text.toString().trim { it <= ' ' }
+            val password = etPassword.text.toString().trim { it <= ' ' }
+
+            // Login using FirebaseAuth
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+
+                    // Hide the progress dialog
+                    hideProgressDialog()
+
+                    if (task.isSuccessful) {
+
+                        // TODO - Send user to main activity
+                        showErrorSnackBar("You logged in successfully.", false)
+                    } else {
+
+                        showErrorSnackBar(task.exception!!.message.toString(), true)
+                    }
+                }
+        }
     }
 }

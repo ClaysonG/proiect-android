@@ -1,6 +1,5 @@
 package com.example.partyfinder.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.CheckBox
@@ -9,6 +8,8 @@ import com.example.partyfinder.R
 import com.example.partyfinder.utils.CustomButton
 import com.example.partyfinder.utils.CustomEditText
 import com.example.partyfinder.utils.CustomTextViewBold
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 class RegisterActivity : BaseActivity() {
 
@@ -40,13 +41,13 @@ class RegisterActivity : BaseActivity() {
 
         tvLogin.setOnClickListener {
 
-            val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
-            startActivity(intent)
+            // val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
+            // startActivity(intent)
             finish()
         }
 
         btnRegister.setOnClickListener {
-            validateRegisterDetails()
+            registerUser()
         }
     }
 
@@ -102,9 +103,47 @@ class RegisterActivity : BaseActivity() {
             }
 
             else -> {
-                showErrorSnackBar(resources.getString(R.string.register_success), false)
+                // showErrorSnackBar(resources.getString(R.string.register_success), false)
                 true
             }
+        }
+    }
+
+    private fun registerUser() {
+
+        // Check with validate function if the entries are valid or not.
+        if (validateRegisterDetails()) {
+
+            showProgressDialog(resources.getString(R.string.please_wait))
+
+            val email: String = etEmail.text.toString().trim { it <= ' ' }
+            val password: String = etPassword.text.toString().trim { it <= ' ' }
+
+            // Create an instance and create a register a user with email and password.
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+
+                    hideProgressDialog()
+
+                    // If the registration is successfully done
+                    if (task.isSuccessful) {
+
+                        // Firebase registered user
+                        val firebaseUser: FirebaseUser = task.result!!.user!!
+
+                        showErrorSnackBar(
+                            "Account created successfully. Your user id is ${firebaseUser.uid}",
+                            false
+                        )
+
+                        FirebaseAuth.getInstance().signOut()
+                        finish()
+                    } else {
+
+                        // If the registering is not successful then show error message.
+                        showErrorSnackBar(task.exception!!.message.toString(), true)
+                    }
+                }
         }
     }
 }
