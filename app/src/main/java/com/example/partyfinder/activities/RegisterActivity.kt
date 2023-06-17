@@ -3,8 +3,11 @@ package com.example.partyfinder.activities
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.CheckBox
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.example.partyfinder.R
+import com.example.partyfinder.firestore.FirestoreClass
+import com.example.partyfinder.models.User
 import com.example.partyfinder.utils.CustomButton
 import com.example.partyfinder.utils.CustomEditText
 import com.example.partyfinder.utils.CustomTextViewBold
@@ -60,6 +63,7 @@ class RegisterActivity : BaseActivity() {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24)
+            actionBar.setDisplayShowTitleEnabled(false)
         }
 
         tbRegister.setNavigationOnClickListener { onBackPressed() }
@@ -123,27 +127,43 @@ class RegisterActivity : BaseActivity() {
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
 
-                    hideProgressDialog()
-
                     // If the registration is successfully done
                     if (task.isSuccessful) {
 
                         // Firebase registered user
                         val firebaseUser: FirebaseUser = task.result!!.user!!
 
-                        showErrorSnackBar(
-                            "Account created successfully. Your user id is ${firebaseUser.uid}",
-                            false
+                        val user = User(
+                            firebaseUser.uid,
+                            etFirstName.text.toString().trim { it <= ' ' },
+                            etLastName.text.toString().trim { it <= ' ' },
+                            etEmail.text.toString().trim { it <= ' ' }
                         )
 
-                        FirebaseAuth.getInstance().signOut()
-                        finish()
+                        FirestoreClass().registerUser(this@RegisterActivity, user)
+
+                        // FirebaseAuth.getInstance().signOut()
+                        // finish()
                     } else {
+
+                        hideProgressDialog()
 
                         // If the registering is not successful then show error message.
                         showErrorSnackBar(task.exception!!.message.toString(), true)
                     }
                 }
         }
+    }
+
+    fun userRegistrationSuccess() {
+
+        // Hide the progress dialog
+        hideProgressDialog()
+
+        Toast.makeText(
+            this@RegisterActivity,
+            resources.getString(R.string.register_success),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }

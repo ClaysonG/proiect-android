@@ -37,4 +37,17 @@
     <string name="forgot_password_title_description">Enter your email address below to receive instructions on how to reset your password.</string>
     <string name="btn_lbl_submit">Submit</string>
 
+    <string name="email_sent_success">Password recovery email sent successfully!</string>
+
+    <string name="title_edit_profile">EDIT PROFILE</string>
+    <string name="title_profile">PROFILE</string>
+    <string name="et_hint_phone_number">Phone Number</string>
+    <string name="rb_lbl_male">MALE</string>
+    <string name="rb_lbl_female">FEMALE</string>
+    <string name="btn_lbl_save">Save</string>
+
+    <string name="read_storage_permission_denied">Oops, it looks like you denied the permission for storage. You can always grant it in the settings.</string>
+
+    <string name="image_selection_failed">Image selection failed!</string>
+
 </resources>
