@@ -34,6 +34,7 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
     private lateinit var etPhoneNumber: CustomEditText
     private lateinit var btnSave: CustomButton
     private lateinit var rbMale: CustomRadioButton
+    private lateinit var rbFemale: CustomRadioButton
 
     private lateinit var mUserDetails: User
     private var mSelectedImageFileUri: Uri? = null
@@ -51,22 +52,42 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
         etPhoneNumber = findViewById(R.id.et_phone_number)
         btnSave = findViewById(R.id.btn_submit)
         rbMale = findViewById(R.id.rb_male)
+        rbFemale = findViewById(R.id.rb_female)
 
         setupActionBar()
 
-        // TODO: update page title accordingly -> "Profile" / "Edit Profile"
         if (intent.hasExtra(Constants.EXTRA_USER_DETAILS)) {
             mUserDetails = intent.getParcelableExtra(Constants.EXTRA_USER_DETAILS)!!
         }
 
-        etFirstName.isEnabled = false
         etFirstName.setText(mUserDetails.firstName)
-
-        etLastName.isEnabled = false
         etLastName.setText(mUserDetails.lastName)
 
         etEmail.isEnabled = false
         etEmail.setText(mUserDetails.email)
+
+        if (mUserDetails.profileCompleted == 0) {
+
+            etFirstName.isEnabled = false
+            etLastName.isEnabled = false
+        } else {
+
+            // setupActionBar()
+
+            GlideLoader(this@UserProfileActivity).loadUserPicture(Uri.parse(mUserDetails.image), ivUserPhoto)
+
+            if (mUserDetails.mobile != 0L) {
+                etPhoneNumber.setText(mUserDetails.mobile.toString())
+            }
+
+            if (mUserDetails.gender == Constants.MALE) {
+
+                rbMale.isChecked = true
+            } else {
+
+                rbFemale.isChecked = true
+            }
+        }
 
         ivUserPhoto.setOnClickListener(this@UserProfileActivity)
         btnSave.setOnClickListener(this@UserProfileActivity)
@@ -135,6 +156,18 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
 
         val userHashMap = HashMap<String, Any>()
 
+        val firstName = etFirstName.text.toString().trim { it <= ' ' }
+        if (firstName != mUserDetails.firstName) {
+
+            userHashMap[Constants.FIRST_NAME] = firstName
+        }
+
+        val lastName = etLastName.text.toString().trim { it <= ' ' }
+        if (lastName != mUserDetails.lastName) {
+
+            userHashMap[Constants.LAST_NAME] = lastName
+        }
+
         val phoneNumber = etPhoneNumber.text.toString().trim { it <= ' ' }
 
         val gender = if (rbMale.isChecked) {
@@ -150,12 +183,15 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
             userHashMap[Constants.IMAGE] = mUserProfileImageURL
         }
 
-        if (phoneNumber.isNotEmpty()) {
+        if (phoneNumber.isNotEmpty() && phoneNumber != mUserDetails.mobile.toString()) {
 
             userHashMap[Constants.MOBILE] = phoneNumber.toLong()
         }
 
-        userHashMap[Constants.GENDER] = gender
+        if (gender.isNotEmpty() && gender != mUserDetails.gender) {
+
+            userHashMap[Constants.GENDER] = gender
+        }
 
         userHashMap[Constants.COMPLETE_PROFILE] = 1
 
@@ -174,7 +210,7 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
             Toast.LENGTH_SHORT
         ).show()
 
-        startActivity(Intent(this@UserProfileActivity, MainActivity::class.java))
+        startActivity(Intent(this@UserProfileActivity, DashboardActivity::class.java))
         finish()
     }
 

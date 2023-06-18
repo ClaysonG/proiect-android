@@ -9,6 +9,7 @@ import com.example.partyfinder.ui.activities.LoginActivity
 import com.example.partyfinder.ui.activities.RegisterActivity
 import com.example.partyfinder.ui.activities.UserProfileActivity
 import com.example.partyfinder.models.User
+import com.example.partyfinder.ui.activities.SettingsActivity
 import com.example.partyfinder.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -83,6 +84,11 @@ class FirestoreClass {
 
                         activity.userLoggedInSuccess(user)
                     }
+
+                    is SettingsActivity -> {
+
+                        activity.userDetailsSuccess(user)
+                    }
                 }
             }
             .addOnFailureListener { e ->
@@ -90,6 +96,11 @@ class FirestoreClass {
                 when (activity) {
 
                     is LoginActivity -> {
+
+                        activity.hideProgressDialog()
+                    }
+
+                    is SettingsActivity -> {
 
                         activity.hideProgressDialog()
                     }

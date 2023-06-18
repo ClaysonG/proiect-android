@@ -20,4 +20,6 @@
     <color name="colorSnackBarError">#F72400</color>
 
     <color name="colorDarkGrey">#191818</color>
+
+    <color name="colorBorder">#E8E6E6</color>
 </resources>
