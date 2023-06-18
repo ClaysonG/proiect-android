@@ -2,7 +2,9 @@ package com.example.partyfinder.utils
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.provider.MediaStore
+import android.webkit.MimeTypeMap
 
 object Constants {
 
@@ -13,6 +15,16 @@ object Constants {
     const val READ_STORAGE_PERMISSION_CODE = 2
     const val PICK_IMAGE_REQUEST_CODE = 1
 
+    const val MALE: String = "male"
+    const val FEMALE: String = "female"
+
+    const val MOBILE: String = "mobile"
+    const val GENDER: String = "gender"
+    const val IMAGE: String = "image"
+    const val COMPLETE_PROFILE: String = "profileCompleted"
+
+    const val USER_PROFILE_IMAGE: String = "User_Profile_Image"
+
     fun showImagePicker(activity: Activity) {
 
         val galleryIntent = Intent(
@@ -21,5 +33,11 @@ object Constants {
         )
 
         activity.startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST_CODE)
+    }
+
+    fun getFileExtension(activity: Activity, uri: Uri?): String? {
+
+        return MimeTypeMap.getSingleton()
+            .getExtensionFromMimeType(activity.contentResolver.getType(uri!!))
     }
 }

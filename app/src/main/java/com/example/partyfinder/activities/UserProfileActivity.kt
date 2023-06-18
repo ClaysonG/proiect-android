@@ -4,7 +4,9 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -12,9 +14,12 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.partyfinder.R
+import com.example.partyfinder.firestore.FirestoreClass
 import com.example.partyfinder.models.User
 import com.example.partyfinder.utils.Constants
+import com.example.partyfinder.utils.CustomButton
 import com.example.partyfinder.utils.CustomEditText
+import com.example.partyfinder.utils.CustomRadioButton
 import com.example.partyfinder.utils.GlideLoader
 import java.io.IOException
 
@@ -26,6 +31,13 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
     private lateinit var etLastName: CustomEditText
     private lateinit var etEmail: CustomEditText
     private lateinit var ivUserPhoto: ImageView
+    private lateinit var etPhoneNumber: CustomEditText
+    private lateinit var btnSave: CustomButton
+    private lateinit var rbMale: CustomRadioButton
+
+    private lateinit var mUserDetails: User
+    private var mSelectedImageFileUri: Uri? = null
+    private var mUserProfileImageURL: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,24 +48,28 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
         etLastName = findViewById(R.id.et_last_name)
         etEmail = findViewById(R.id.et_email)
         ivUserPhoto = findViewById(R.id.iv_user_photo)
+        etPhoneNumber = findViewById(R.id.et_phone_number)
+        btnSave = findViewById(R.id.btn_submit)
+        rbMale = findViewById(R.id.rb_male)
 
         setupActionBar()
 
-        var userDetails = User()
+        // TODO: update page title accordingly -> "Profile" / "Edit Profile"
         if (intent.hasExtra(Constants.EXTRA_USER_DETAILS)) {
-            userDetails = intent.getParcelableExtra(Constants.EXTRA_USER_DETAILS)!!
+            mUserDetails = intent.getParcelableExtra(Constants.EXTRA_USER_DETAILS)!!
         }
 
         etFirstName.isEnabled = false
-        etFirstName.setText(userDetails.firstName)
+        etFirstName.setText(mUserDetails.firstName)
 
         etLastName.isEnabled = false
-        etLastName.setText(userDetails.lastName)
+        etLastName.setText(mUserDetails.lastName)
 
         etEmail.isEnabled = false
-        etEmail.setText(userDetails.email)
+        etEmail.setText(mUserDetails.email)
 
         ivUserPhoto.setOnClickListener(this@UserProfileActivity)
+        btnSave.setOnClickListener(this@UserProfileActivity)
     }
 
     private fun setupActionBar() {
@@ -95,8 +111,71 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
                         )
                     }
                 }
+
+                R.id.btn_submit -> {
+
+                    if (validateUserProfileDetails()) {
+
+                        showProgressDialog(resources.getString(R.string.please_wait))
+
+                        if (mSelectedImageFileUri != null) {
+
+                            FirestoreClass().uploadImageToCloudStorage(this, mSelectedImageFileUri)
+                        } else {
+
+                            updateUserProfileDetails()
+                        }
+                    }
+                }
             }
         }
+    }
+
+    private fun updateUserProfileDetails() {
+
+        val userHashMap = HashMap<String, Any>()
+
+        val phoneNumber = etPhoneNumber.text.toString().trim { it <= ' ' }
+
+        val gender = if (rbMale.isChecked) {
+
+            Constants.MALE
+        } else {
+
+            Constants.FEMALE
+        }
+
+        if (mUserProfileImageURL.isNotEmpty()) {
+
+            userHashMap[Constants.IMAGE] = mUserProfileImageURL
+        }
+
+        if (phoneNumber.isNotEmpty()) {
+
+            userHashMap[Constants.MOBILE] = phoneNumber.toLong()
+        }
+
+        userHashMap[Constants.GENDER] = gender
+
+        userHashMap[Constants.COMPLETE_PROFILE] = 1
+
+        // showProgressDialog(resources.getString(R.string.please_wait))
+
+        FirestoreClass().updateUserProfileData(this, userHashMap)
+    }
+
+    fun userProfileUpdateSuccess() {
+
+        hideProgressDialog()
+
+        Toast.makeText(
+            this@UserProfileActivity,
+            resources.getString(R.string.msg_profile_update_success),
+            Toast.LENGTH_SHORT
+        ).show()
+
+        startActivity(Intent(this@UserProfileActivity, MainActivity::class.java))
+        finish()
     }
 
     override fun onRequestPermissionsResult(
@@ -136,10 +215,10 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
 
                     try {
 
-                        val selectedImageFileUri = data.data!!
+                        mSelectedImageFileUri = data.data!!
 
                         // ivUserPhoto.setImageURI(selectedImageFileUri)
-                        GlideLoader(this).loadUserPicture(selectedImageFileUri, ivUserPhoto)
+                        GlideLoader(this).loadUserPicture(mSelectedImageFileUri!!, ivUserPhoto)
                     } catch (e: IOException) {
 
                         e.printStackTrace()
@@ -156,5 +235,29 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
                 // A log is printed when the user closes or cancels the image selection.
                 Log.e("Request Canceled", "Image selection canceled")
         }
+    }
+
+    private fun validateUserProfileDetails() : Boolean {
+
+        return when {
+
+            TextUtils.isEmpty(etPhoneNumber.text.toString().trim { it <= ' ' }) -> {
+
+                showErrorSnackBar(resources.getString(R.string.err_msg_enter_phone_number), true)
+                false
+            } else -> {
+
+                true
+            }
+        }
+    }
+
+    fun imageUploadSuccess(imageURL: String) {
+
+        // hideProgressDialog()
+
+        mUserProfileImageURL = imageURL
+
+        updateUserProfileDetails()
     }
 }

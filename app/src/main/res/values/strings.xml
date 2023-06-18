@@ -50,4 +50,8 @@
 
     <string name="image_selection_failed">Image selection failed!</string>
 
+    <string name="err_msg_enter_phone_number">Please enter phone number.</string>
+
+    <string name="msg_profile_update_success">Profile updated successfully!</string>
+
 </resources>
