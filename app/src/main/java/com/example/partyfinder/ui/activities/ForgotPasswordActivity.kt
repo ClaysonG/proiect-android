@@ -1,4 +1,4 @@
-package com.example.partyfinder.activities
+package com.example.partyfinder.ui.activities
 
 import android.os.Bundle
 import android.widget.Toast

@@ -1,4 +1,4 @@
-package com.example.partyfinder.activities
+package com.example.partyfinder.ui.activities
 
 import android.annotation.SuppressLint
 import android.content.Context

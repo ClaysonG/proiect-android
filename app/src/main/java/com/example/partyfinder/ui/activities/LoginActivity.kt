@@ -1,10 +1,9 @@
-package com.example.partyfinder.activities
+package com.example.partyfinder.ui.activities
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import android.widget.VideoView
 import com.example.partyfinder.R
@@ -174,7 +173,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         } else {
 
             // Redirect the user to Main Screen after log in.
-            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            val intent = Intent(this@LoginActivity, DashboardActivity::class.java)
             startActivity(intent)
         }
         finish()

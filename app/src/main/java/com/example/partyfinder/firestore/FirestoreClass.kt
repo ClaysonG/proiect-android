@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
-import com.example.partyfinder.activities.LoginActivity
-import com.example.partyfinder.activities.RegisterActivity
-import com.example.partyfinder.activities.UserProfileActivity
+import com.example.partyfinder.ui.activities.LoginActivity
+import com.example.partyfinder.ui.activities.RegisterActivity
+import com.example.partyfinder.ui.activities.UserProfileActivity
 import com.example.partyfinder.models.User
 import com.example.partyfinder.utils.Constants
 import com.google.firebase.auth.FirebaseAuth

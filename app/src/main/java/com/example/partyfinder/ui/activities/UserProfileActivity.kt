@@ -1,4 +1,4 @@
-package com.example.partyfinder.activities
+package com.example.partyfinder.ui.activities
 
 import android.Manifest
 import android.app.Activity
