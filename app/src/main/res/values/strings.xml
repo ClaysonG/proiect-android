@@ -7,6 +7,7 @@
     <string name="et_hint_password">Password</string>
     <string name="lbl_forgot_password">Forgot Password?</string>
     <string name="btn_lbl_login">Login</string>
+    <string name="btn_lbl_google_login">Continue with Google</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
     <string name="register"><u>Register</u></string>
 

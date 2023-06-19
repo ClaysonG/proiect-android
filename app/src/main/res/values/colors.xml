@@ -22,4 +22,7 @@
     <color name="colorDarkGrey">#191818</color>
 
     <color name="colorBorder">#E8E6E6</color>
+
+    <color name="colorGoogleLightBlue">#4285F4</color>
+    <color name="colorGoogleDarkBlue">#004277</color>
 </resources>

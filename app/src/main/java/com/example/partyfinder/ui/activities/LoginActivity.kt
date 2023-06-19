@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import android.widget.Toast
 import android.widget.VideoView
 import com.example.partyfinder.R
 import com.example.partyfinder.firestore.FirestoreClass
@@ -24,6 +25,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     private lateinit var etPassword: CustomEditText
     private lateinit var tvForgotPassword: CustomTextView
     private lateinit var btnLogin: CustomButton
+    private lateinit var btnGoogleLogin: CustomButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +40,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         etPassword = findViewById(R.id.et_password)
         tvForgotPassword = findViewById(R.id.tv_forgot_password)
         btnLogin = findViewById(R.id.btn_login)
+        btnGoogleLogin = findViewById(R.id.btn_google_login)
 
         tvForgotPassword.setOnClickListener(this)
         btnLogin.setOnClickListener(this)
         tvRegister.setOnClickListener(this)
+        btnGoogleLogin.setOnClickListener(this)
 
         loadVideo()
     }
@@ -113,6 +117,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
                     val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
                     startActivity(intent)
+                }
+
+                R.id.btn_google_login -> {
+
+                    Toast.makeText(this, "Google login", Toast.LENGTH_SHORT).show()
                 }
             }
         }
