@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.partyfinder.R
+import com.example.partyfinder.ui.activities.DashboardActivity
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -16,6 +17,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
 class MapFragment : Fragment() {
+
+    private lateinit var parentActivity: DashboardActivity
 
     private val callback = OnMapReadyCallback { googleMap ->
         /**
@@ -37,6 +40,9 @@ class MapFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        parentActivity = activity as DashboardActivity
+
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
 
@@ -44,5 +50,11 @@ class MapFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        parentActivity.tvTitle.text = resources.getString(R.string.title_map_fragment)
     }
 }

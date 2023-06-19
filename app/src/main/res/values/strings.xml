@@ -2,7 +2,7 @@
     <string name="app_name">Party Finder</string>
 
     <string name="content_description">image</string>
-    <string name="title_login">LOGIN</string>
+    <string name="title_login">Login</string>
     <string name="et_hint_email_id">Email</string>
     <string name="et_hint_password">Password</string>
     <string name="lbl_forgot_password">Forgot Password?</string>
@@ -10,7 +10,7 @@
     <string name="don_t_have_an_account">Don\'t have an account?</string>
     <string name="register"><u>Register</u></string>
 
-    <string name="create_an_account">CREATE AN ACCOUNT</string>
+    <string name="create_an_account">Create an Account</string>
 
     <string name="hint_last_name">Last name</string>
     <string name="hint_first_name">First name</string>
@@ -33,13 +33,13 @@
 
     <string name="please_wait">Please Wait&#8230;</string>
 
-    <string name="title_forgot_password">FORGOT PASSWORD</string>
+    <string name="title_forgot_password">Forgot Password</string>
     <string name="forgot_password_title_description">Enter your email address below to receive instructions on how to reset your password.</string>
     <string name="btn_lbl_submit">Submit</string>
 
     <string name="email_sent_success">Password recovery email sent successfully!</string>
 
-    <string name="title_edit_profile">EDIT PROFILE</string>
+    <string name="title_edit_profile">Edit Profile</string>
     <string name="title_profile">Profile</string>
     <string name="et_hint_phone_number">Phone Number</string>
     <string name="rb_lbl_male">MALE</string>
@@ -65,5 +65,8 @@
     <string name="title_settings">Settings</string>
     <string name="lbl_edit">Edit</string>
     <string name="btn_lbl_logout">Logout</string>
+
+    <string name="title_home_fragment">Home</string>
+    <string name="title_map_fragment">Find new parties</string>
 
 </resources>

@@ -8,8 +8,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.partyfinder.R
+import com.example.partyfinder.ui.activities.DashboardActivity
 
 class HomeFragment : Fragment() {
+
+    private lateinit var parentActivity: DashboardActivity
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -23,6 +26,14 @@ class HomeFragment : Fragment() {
 
         textView.text = "Home fragment"
 
+        parentActivity = activity as DashboardActivity
+
         return root
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        parentActivity.tvTitle.text = resources.getString(R.string.title_home_fragment)
     }
 }

@@ -1,6 +1,7 @@
 package com.example.partyfinder.ui.activities
 
 import android.os.Bundle
+import android.widget.TextView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -11,6 +12,7 @@ import com.example.partyfinder.R
 class DashboardActivity : BaseActivity() {
 
     private lateinit var tbDashboard: androidx.appcompat.widget.Toolbar
+    lateinit var tvTitle: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,6 +20,7 @@ class DashboardActivity : BaseActivity() {
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         tbDashboard = findViewById(R.id.toolbar_dashboard_activity)
+        tvTitle = findViewById(R.id.tv_title)
 
         setupActionBar()
 

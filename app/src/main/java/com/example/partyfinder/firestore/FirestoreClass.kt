@@ -5,11 +5,14 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
+import androidx.fragment.app.Fragment
 import com.example.partyfinder.ui.activities.LoginActivity
 import com.example.partyfinder.ui.activities.RegisterActivity
 import com.example.partyfinder.ui.activities.UserProfileActivity
 import com.example.partyfinder.models.User
+import com.example.partyfinder.ui.activities.DashboardActivity
 import com.example.partyfinder.ui.activities.SettingsActivity
+import com.example.partyfinder.ui.fragments.ProfileFragment
 import com.example.partyfinder.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -54,7 +57,7 @@ class FirestoreClass {
         return currentUserID
     }
 
-    fun getUserDetails(activity: Activity) {
+    fun getUserDetails(activity: Activity, fragment: Fragment? = null) {
 
         mFireStore.collection(Constants.USERS)
             .document(getCurrentUserID())
@@ -85,9 +88,9 @@ class FirestoreClass {
                         activity.userLoggedInSuccess(user)
                     }
 
-                    is SettingsActivity -> {
+                    is DashboardActivity -> {
 
-                        activity.userDetailsSuccess(user)
+                        (fragment as ProfileFragment).userDetailsSuccess(user)
                     }
                 }
             }
@@ -100,7 +103,7 @@ class FirestoreClass {
                         activity.hideProgressDialog()
                     }
 
-                    is SettingsActivity -> {
+                    is DashboardActivity -> {
 
                         activity.hideProgressDialog()
                     }

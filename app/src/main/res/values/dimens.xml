@@ -16,7 +16,7 @@
     <dimen name="lbl_text_view_textSize">16sp</dimen>
 
     <dimen name="toolbar_title_paddingStart">-70dp</dimen>
-    <dimen name="toolbar_title_text_size">18sp</dimen>
+    <dimen name="toolbar_title_text_size">22sp</dimen>
     <dimen name="txt_terms_condition_marginStart">10dp</dimen>
     <dimen name="txt_terms_and_condition_textSize">14sp</dimen>
     <dimen name="button_paddingTop_bottom">8dp</dimen>
@@ -43,7 +43,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="header_image_height">200dp</dimen>
+    <dimen name="header_image_height">150dp</dimen>
     <dimen name="settings_user_image_size">150dp</dimen>
     <dimen name="settings_user_image_marginTop">-75dp</dimen>
     <dimen name="settings_user_picture_margin">3dp</dimen>
@@ -52,7 +52,7 @@
     <dimen name="settings_edit_label_marginStartEnd">10dp</dimen>
     <dimen name="settings_edit_label_marginTopBottom">5dp</dimen>
     <dimen name="settings_edit_label_textSize">14sp</dimen>
-    <dimen name="settings_name_marginTop">30dp</dimen>
+    <dimen name="settings_name_marginTop">25dp</dimen>
     <dimen name="settings_name_textSize">22sp</dimen>
     <dimen name="settings_info_marginTop">3dp</dimen>
     <dimen name="settings_info_textSize">18sp</dimen>
