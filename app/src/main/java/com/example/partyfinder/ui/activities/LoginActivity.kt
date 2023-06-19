@@ -27,6 +27,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        checkLoginStatus()
+
         setContentView(R.layout.activity_login)
 
         tvRegister = findViewById(R.id.tv_register)
@@ -177,5 +180,16 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             startActivity(intent)
         }
         finish()
+    }
+
+    private fun checkLoginStatus() {
+
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+
+            val intent = Intent(this@LoginActivity, DashboardActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 }

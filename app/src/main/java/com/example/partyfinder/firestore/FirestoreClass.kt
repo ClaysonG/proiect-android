@@ -11,7 +11,6 @@ import com.example.partyfinder.ui.activities.RegisterActivity
 import com.example.partyfinder.ui.activities.UserProfileActivity
 import com.example.partyfinder.models.User
 import com.example.partyfinder.ui.activities.DashboardActivity
-import com.example.partyfinder.ui.activities.SettingsActivity
 import com.example.partyfinder.ui.fragments.ProfileFragment
 import com.example.partyfinder.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
