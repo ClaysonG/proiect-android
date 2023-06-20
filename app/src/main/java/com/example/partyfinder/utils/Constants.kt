@@ -26,6 +26,8 @@ object Constants {
 
     const val USER_PROFILE_IMAGE: String = "User_Profile_Image"
 
+    const val GOOGLE_SIGN_IN_CODE = 100
+
     fun showImagePicker(activity: Activity) {
 
         val galleryIntent = Intent(

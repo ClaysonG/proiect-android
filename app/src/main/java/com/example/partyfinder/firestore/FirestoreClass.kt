@@ -23,18 +23,40 @@ class FirestoreClass {
 
     private val mFireStore = FirebaseFirestore.getInstance()
 
-    fun registerUser(activity: RegisterActivity, userInfo: User) {
+    fun registerUser(activity: Activity, userInfo: User) {
 
         mFireStore.collection(Constants.USERS)
             .document(userInfo.id)
             .set(userInfo, SetOptions.merge())
             .addOnSuccessListener {
 
-                activity.userRegistrationSuccess()
+                when (activity) {
+
+                    is RegisterActivity -> {
+
+                        activity.userRegistrationSuccess()
+                    }
+
+                    is LoginActivity -> {
+
+                        activity.userLoggedInSuccess(userInfo)
+                    }
+                }
             }
             .addOnFailureListener { e ->
 
-                activity.hideProgressDialog()
+                when (activity) {
+
+                    is RegisterActivity -> {
+
+                        activity.hideProgressDialog()
+                    }
+
+                    is LoginActivity -> {
+
+                        activity.hideProgressDialog()
+                    }
+                }
                 Log.e(
                     activity.javaClass.simpleName,
                     "Error while registering the user.",

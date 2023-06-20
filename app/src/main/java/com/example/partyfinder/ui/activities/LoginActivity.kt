@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import android.widget.Toast
 import android.widget.VideoView
 import com.example.partyfinder.R
 import com.example.partyfinder.firestore.FirestoreClass
@@ -15,7 +14,16 @@ import com.example.partyfinder.utils.CustomButton
 import com.example.partyfinder.utils.CustomEditText
 import com.example.partyfinder.utils.CustomTextView
 import com.example.partyfinder.utils.CustomTextViewBold
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 
 class LoginActivity : BaseActivity(), View.OnClickListener {
 
@@ -26,6 +34,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     private lateinit var tvForgotPassword: CustomTextView
     private lateinit var btnLogin: CustomButton
     private lateinit var btnGoogleLogin: CustomButton
+
+    private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,7 +131,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
                 R.id.btn_google_login -> {
 
-                    Toast.makeText(this, "Google login", Toast.LENGTH_SHORT).show()
+                    loginWithGoogle()
                 }
             }
         }
@@ -172,6 +182,23 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    @Suppress("DEPRECATION")
+    private fun loginWithGoogle() {
+
+        showProgressDialog(resources.getString(R.string.please_wait))
+
+        val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this@LoginActivity, googleSignInOptions)
+
+        val intent: Intent = googleSignInClient.signInIntent
+
+        startActivityForResult(intent, Constants.GOOGLE_SIGN_IN_CODE)
+    }
+
     fun userLoggedInSuccess(user: User) {
 
         hideProgressDialog()
@@ -199,6 +226,75 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             val intent = Intent(this@LoginActivity, DashboardActivity::class.java)
             startActivity(intent)
             finish()
+        }
+    }
+
+    private fun isFirstLoginWithEmail(email: String): Boolean {
+
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val providerData = currentUser?.providerData ?: emptyList()
+        return providerData.none { it.providerId == GoogleAuthProvider.PROVIDER_ID && it.email == email }
+    }
+
+    @Deprecated("Deprecated in Java")
+    @Suppress("DEPRECATION")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == Constants.GOOGLE_SIGN_IN_CODE) {
+
+            if (resultCode == RESULT_OK) {
+
+                val signInAccountTask: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+
+                if (signInAccountTask.isSuccessful) {
+
+                    try {
+
+                        val googleSignInAccount = signInAccountTask.getResult(ApiException::class.java)
+
+                        if (googleSignInAccount != null) {
+
+                            val authCredential: AuthCredential = GoogleAuthProvider.getCredential(googleSignInAccount.idToken, null)
+
+                            FirebaseAuth.getInstance().signInWithCredential(authCredential)
+                                .addOnCompleteListener { task ->
+
+                                    if (task.isSuccessful) {
+
+                                        val firebaseUser: FirebaseUser = task.result!!.user!!
+
+                                        val user = User(
+                                            firebaseUser.uid,
+                                            firebaseUser.displayName!!.split(" ")[0],
+                                            firebaseUser.displayName!!.split(" ")[1],
+                                            firebaseUser.email!!,
+                                        )
+
+                                        if (isFirstLoginWithEmail(user.email)) {
+
+                                            FirestoreClass().registerUser(this@LoginActivity, user)
+                                        } else {
+
+                                            FirestoreClass().getUserDetails(this@LoginActivity)
+                                        }
+                                    } else {
+
+                                        hideProgressDialog()
+                                        showErrorSnackBar(task.exception!!.message.toString(), true)
+                                    }
+                                }
+                        }
+                    } catch (e: ApiException) {
+
+                        hideProgressDialog()
+                        showErrorSnackBar(e.message.toString(), true)
+                    }
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+
+                hideProgressDialog()
+            }
         }
     }
 }
