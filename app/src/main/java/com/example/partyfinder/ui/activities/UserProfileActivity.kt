@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.partyfinder.R
@@ -116,21 +117,7 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
 
                 R.id.iv_user_photo -> {
 
-                    // Here we will check if the permission is already allowed or id we need to ask for it.
-                    // If the permission is already allowed then the boolean value returned will be true else false.
-                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-
-                        // showErrorSnackBar("Storage permission already granted.", false)
-                        Constants.showImagePicker(this)
-                    } else {
-
-                        // Request permissions to be granted to this application at runtime.
-                        ActivityCompat.requestPermissions(
-                            this,
-                            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                            Constants.READ_STORAGE_PERMISSION_CODE
-                        )
-                    }
+                    showImagePickerMenu()
                 }
 
                 R.id.btn_submit -> {
@@ -295,5 +282,55 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
         mUserProfileImageURL = imageURL
 
         updateUserProfileDetails()
+    }
+
+    private fun showImagePickerMenu() {
+
+        val popupMenu = PopupMenu(this, ivUserPhoto)
+        popupMenu.menuInflater.inflate(R.menu.image_picker_menu, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener { item ->
+
+            when (item.itemId) {
+
+                R.id.menu_gallery -> {
+
+                    openGallery()
+                    true
+                }
+
+                R.id.menu_camera -> {
+
+                    openCamera()
+                    true
+                }
+
+                else -> false
+            }
+        }
+        popupMenu.show()
+    }
+
+    private fun openGallery() {
+
+        // Here we will check if the permission is already allowed or id we need to ask for it.
+        // If the permission is already allowed then the boolean value returned will be true else false.
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+            // showErrorSnackBar("Storage permission already granted.", false)
+            Constants.showImagePicker(this)
+        } else {
+
+            // Request permissions to be granted to this application at runtime.
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                Constants.READ_STORAGE_PERMISSION_CODE
+            )
+        }
+    }
+
+    private fun openCamera() {
+
+        Toast.makeText(this, "Camera", Toast.LENGTH_SHORT).show()
     }
 }

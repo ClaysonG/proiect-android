@@ -70,4 +70,7 @@
     <string name="title_home_fragment">Home</string>
     <string name="title_map_fragment">Find new parties</string>
 
+    <string name="choose_from_gallery">Choose from Gallery</string>
+    <string name="take_a_picture">Take a Picture</string>
+
 </resources>
