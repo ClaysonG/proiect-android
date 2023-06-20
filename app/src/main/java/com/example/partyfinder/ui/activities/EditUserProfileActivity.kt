@@ -25,7 +25,7 @@ import com.example.partyfinder.utils.GlideLoader
 import java.io.IOException
 
 @Suppress("DEPRECATION")
-class UserProfileActivity : BaseActivity(), View.OnClickListener {
+class EditUserProfileActivity : BaseActivity(), View.OnClickListener {
 
     private lateinit var tbUserProfile: androidx.appcompat.widget.Toolbar
     private lateinit var etFirstName: CustomEditText
@@ -43,9 +43,9 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user_profile)
+        setContentView(R.layout.activity_edit_user_profile)
 
-        tbUserProfile = findViewById(R.id.toolbar_user_profile_activity)
+        tbUserProfile = findViewById(R.id.toolbar_edit_user_profile_activity)
         etFirstName = findViewById(R.id.et_first_name)
         etLastName = findViewById(R.id.et_last_name)
         etEmail = findViewById(R.id.et_email)
@@ -75,7 +75,7 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
 
             // setupActionBar()
 
-            GlideLoader(this@UserProfileActivity).loadUserPicture(Uri.parse(mUserDetails.image), ivUserPhoto)
+            GlideLoader(this@EditUserProfileActivity).loadUserPicture(Uri.parse(mUserDetails.image), ivUserPhoto)
 
             if (mUserDetails.mobile != 0L) {
                 etPhoneNumber.setText(mUserDetails.mobile.toString())
@@ -90,8 +90,8 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
             }
         }
 
-        ivUserPhoto.setOnClickListener(this@UserProfileActivity)
-        btnSave.setOnClickListener(this@UserProfileActivity)
+        ivUserPhoto.setOnClickListener(this@EditUserProfileActivity)
+        btnSave.setOnClickListener(this@EditUserProfileActivity)
     }
 
     private fun setupActionBar() {
@@ -192,12 +192,12 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
         hideProgressDialog()
 
         Toast.makeText(
-            this@UserProfileActivity,
+            this@EditUserProfileActivity,
             resources.getString(R.string.msg_profile_update_success),
             Toast.LENGTH_SHORT
         ).show()
 
-        startActivity(Intent(this@UserProfileActivity, DashboardActivity::class.java))
+        startActivity(Intent(this@EditUserProfileActivity, DashboardActivity::class.java))
         finish()
     }
 
@@ -246,7 +246,7 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
 
                         e.printStackTrace()
                         Toast.makeText(
-                            this@UserProfileActivity,
+                            this@EditUserProfileActivity,
                             resources.getString(R.string.image_selection_failed),
                             Toast.LENGTH_SHORT
                         ).show()

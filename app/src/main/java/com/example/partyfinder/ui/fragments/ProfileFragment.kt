@@ -16,7 +16,7 @@ import com.example.partyfinder.firestore.FirestoreClass
 import com.example.partyfinder.models.User
 import com.example.partyfinder.ui.activities.DashboardActivity
 import com.example.partyfinder.ui.activities.SettingsActivity
-import com.example.partyfinder.ui.activities.UserProfileActivity
+import com.example.partyfinder.ui.activities.EditUserProfileActivity
 import com.example.partyfinder.utils.Constants
 import com.example.partyfinder.utils.CustomTextView
 import com.example.partyfinder.utils.CustomTextViewBold
@@ -126,7 +126,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
 
                 R.id.tv_edit -> {
 
-                    val intent = Intent(parentActivity, UserProfileActivity::class.java)
+                    val intent = Intent(parentActivity, EditUserProfileActivity::class.java)
                     intent.putExtra(Constants.EXTRA_USER_DETAILS, mUserDetails)
                     startActivity(intent)
                 }

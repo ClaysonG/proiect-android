@@ -8,7 +8,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.partyfinder.ui.activities.LoginActivity
 import com.example.partyfinder.ui.activities.RegisterActivity
-import com.example.partyfinder.ui.activities.UserProfileActivity
+import com.example.partyfinder.ui.activities.EditUserProfileActivity
 import com.example.partyfinder.models.User
 import com.example.partyfinder.ui.activities.DashboardActivity
 import com.example.partyfinder.ui.fragments.ProfileFragment
@@ -125,7 +125,7 @@ class FirestoreClass {
 
                 when (activity) {
 
-                    is UserProfileActivity -> {
+                    is EditUserProfileActivity -> {
 
                         activity.userProfileUpdateSuccess()
                     }
@@ -135,7 +135,7 @@ class FirestoreClass {
 
                 when (activity) {
 
-                    is UserProfileActivity -> {
+                    is EditUserProfileActivity -> {
 
                         activity.hideProgressDialog()
                     }
@@ -172,7 +172,7 @@ class FirestoreClass {
 
                 when (activity) {
 
-                    is UserProfileActivity -> {
+                    is EditUserProfileActivity -> {
 
                         activity.imageUploadSuccess(uri.toString())
                     }
@@ -183,7 +183,7 @@ class FirestoreClass {
 
                 when (activity) {
 
-                    is UserProfileActivity -> {
+                    is EditUserProfileActivity -> {
 
                         activity.hideProgressDialog()
                     }

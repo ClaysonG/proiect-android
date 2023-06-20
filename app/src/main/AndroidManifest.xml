@@ -38,7 +38,7 @@
             android:name=".ui.activities.DashboardActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.UserProfileActivity"
+            android:name=".ui.activities.EditUserProfileActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.ForgotPasswordActivity"

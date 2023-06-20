@@ -178,8 +178,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
         if (user.profileCompleted == 0) {
 
-            // If the user profile is incomplete then launch the UserProfileActivity.
-            val intent = Intent(this@LoginActivity, UserProfileActivity::class.java)
+            // If the user profile is incomplete then launch the EditUserProfileActivity.
+            val intent = Intent(this@LoginActivity, EditUserProfileActivity::class.java)
             intent.putExtra(Constants.EXTRA_USER_DETAILS, user)
             startActivity(intent)
         } else {
