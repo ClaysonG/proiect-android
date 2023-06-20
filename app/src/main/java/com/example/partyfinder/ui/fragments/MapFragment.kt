@@ -1,19 +1,17 @@
 package com.example.partyfinder.ui.fragments
 
 import androidx.fragment.app.Fragment
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.partyfinder.R
 import com.example.partyfinder.ui.activities.DashboardActivity
-
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 
 class MapFragment : Fragment() {
@@ -30,9 +28,14 @@ class MapFragment : Fragment() {
          * install it inside the SupportMapFragment. This method will only be triggered once the
          * user has installed Google Play services and returned to the app.
          */
+
+        val mapStyleOptions = context?.let { MapStyleOptions.loadRawResourceStyle(it, R.raw.map_style) }
+
         val sydney = LatLng(-34.0, 151.0)
+
+        googleMap.setMapStyle(mapStyleOptions)
         googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 1.0f))
     }
 
     override fun onCreateView(
