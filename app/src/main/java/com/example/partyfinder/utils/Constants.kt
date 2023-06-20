@@ -28,6 +28,9 @@ object Constants {
 
     const val GOOGLE_SIGN_IN_CODE = 100
 
+    const val CAMERA_PERMISSION_CODE = 3
+    const val CAMERA_REQUEST_CODE = 4
+
     fun showImagePicker(activity: Activity) {
 
         val galleryIntent = Intent(
@@ -42,5 +45,11 @@ object Constants {
 
         return MimeTypeMap.getSingleton()
             .getExtensionFromMimeType(activity.contentResolver.getType(uri!!))
+    }
+
+    fun takePhoto(activity: Activity) {
+
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        activity.startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE)
     }
 }

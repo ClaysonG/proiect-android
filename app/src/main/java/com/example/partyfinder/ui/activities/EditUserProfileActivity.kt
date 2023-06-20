@@ -2,13 +2,20 @@ package com.example.partyfinder.ui.activities
 
 import android.Manifest
 import android.app.Activity
+import android.content.ContentResolver
+import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.webkit.MimeTypeMap
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
@@ -22,7 +29,10 @@ import com.example.partyfinder.utils.CustomButton
 import com.example.partyfinder.utils.CustomEditText
 import com.example.partyfinder.utils.CustomRadioButton
 import com.example.partyfinder.utils.GlideLoader
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
+import java.io.OutputStream
 
 @Suppress("DEPRECATION")
 class EditUserProfileActivity : BaseActivity(), View.OnClickListener {
@@ -224,6 +234,22 @@ class EditUserProfileActivity : BaseActivity(), View.OnClickListener {
                     ).show()
                 }
         }
+
+        if (requestCode == Constants.CAMERA_PERMISSION_CODE) {
+
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                // showErrorSnackBar("Camera permission granted.", false)
+                Constants.takePhoto(this)
+            } else {
+
+                Toast.makeText(
+                    this,
+                    resources.getString(R.string.camera_permission_denied),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
     }
 
     @Deprecated("Deprecated in Java")
@@ -253,11 +279,73 @@ class EditUserProfileActivity : BaseActivity(), View.OnClickListener {
                     }
                 }
             }
+
+            if (requestCode == Constants.CAMERA_REQUEST_CODE) {
+
+                val thumbnail: Bitmap = data!!.extras!!.get("data") as Bitmap
+                // ivUserPhoto.setImageBitmap(thumbnail)
+
+                try {
+
+                    mSelectedImageFileUri = getBitmapUri(applicationContext, thumbnail)!!
+
+                    GlideLoader(this).loadUserPicture(mSelectedImageFileUri!!, ivUserPhoto)
+                } catch (e: IOException) {
+
+                    e.printStackTrace()
+                    Toast.makeText(
+                        this@EditUserProfileActivity,
+                        resources.getString(R.string.image_selection_failed),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         } else if (requestCode == Activity.RESULT_CANCELED) {
 
                 // A log is printed when the user closes or cancels the image selection.
                 Log.e("Request Canceled", "Image selection canceled")
         }
+    }
+
+    private fun getBitmapUri(context: Context, bitmap: Bitmap): Uri? {
+
+        var imageUri: Uri? = null
+
+        try {
+
+            val file = File(context.externalCacheDir, "temp_image.png")
+            val outputStream: OutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            outputStream.flush()
+            outputStream.close()
+
+            val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension("png")
+            val values = ContentValues().apply {
+                put(MediaStore.Images.Media.DISPLAY_NAME, "temp_image")
+                put(MediaStore.Images.Media.MIME_TYPE, mimeType)
+                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/")
+            }
+
+            val contentResolver: ContentResolver = context.contentResolver
+            val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+            if (uri != null) {
+
+                val newOutputStream = contentResolver.openOutputStream(uri)
+                if (newOutputStream != null) {
+                    newOutputStream.write(file.readBytes())
+                    newOutputStream.close()
+                    imageUri = uri
+                }
+            }
+
+            // Notify the media scanner about the new image file
+            MediaScannerConnection.scanFile(context, arrayOf(file.absolutePath), null) { _, _ -> }
+
+        } catch (e: IOException) {
+
+            e.printStackTrace()
+        }
+        return imageUri
     }
 
     private fun validateUserProfileDetails() : Boolean {
@@ -331,6 +419,17 @@ class EditUserProfileActivity : BaseActivity(), View.OnClickListener {
 
     private fun openCamera() {
 
-        Toast.makeText(this, "Camera", Toast.LENGTH_SHORT).show()
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+
+            // showErrorSnackBar("Camera permission already granted.", false)
+            Constants.takePhoto(this)
+        } else {
+
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.CAMERA),
+                Constants.CAMERA_PERMISSION_CODE
+            )
+        }
     }
 }
