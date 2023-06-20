@@ -78,6 +78,23 @@ class FirestoreClass {
         return currentUserID
     }
 
+    fun userExists(userId: String, callback: (Boolean) -> Unit) {
+
+        mFireStore.collection(Constants.USERS)
+            .document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+
+                val exists = document.exists()
+                callback(exists)
+            }
+            .addOnFailureListener { e ->
+
+                Log.e("FirestoreClass", "Error while checking if user exists.", e)
+                callback(false)
+            }
+    }
+
     fun getUserDetails(activity: Activity, fragment: Fragment? = null) {
 
         mFireStore.collection(Constants.USERS)

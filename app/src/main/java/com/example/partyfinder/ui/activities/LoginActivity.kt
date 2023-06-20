@@ -229,13 +229,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun isFirstLoginWithEmail(email: String): Boolean {
-
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val providerData = currentUser?.providerData ?: emptyList()
-        return providerData.none { it.providerId == GoogleAuthProvider.PROVIDER_ID && it.email == email }
-    }
-
     @Deprecated("Deprecated in Java")
     @Suppress("DEPRECATION")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -271,12 +264,15 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                                             firebaseUser.email!!,
                                         )
 
-                                        if (isFirstLoginWithEmail(user.email)) {
+                                        FirestoreClass().userExists(firebaseUser.uid) { exists ->
 
-                                            FirestoreClass().registerUser(this@LoginActivity, user)
-                                        } else {
+                                                if (!exists) {
 
-                                            FirestoreClass().getUserDetails(this@LoginActivity)
+                                                    FirestoreClass().registerUser(this@LoginActivity, user)
+                                                } else {
+
+                                                    FirestoreClass().getUserDetails(this@LoginActivity)
+                                                }
                                         }
                                     } else {
 
