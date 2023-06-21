@@ -1,8 +1,19 @@
 package com.example.partyfinder.ui.activities
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.ContentResolver
+import android.content.ContentValues
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
+import android.webkit.MimeTypeMap
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -11,10 +22,17 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.partyfinder.R
+import com.example.partyfinder.ui.fragments.DatePickerFragment
 import com.example.partyfinder.ui.fragments.MapFragment
+import com.example.partyfinder.ui.fragments.NewPartyFragment
 import com.example.partyfinder.utils.Constants
+import com.example.partyfinder.utils.GlideLoader
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
 
-class DashboardActivity : BaseActivity() {
+class DashboardActivity : BaseActivity(), DatePickerFragment.DateSelectionListener {
 
     private lateinit var tbDashboard: androidx.appcompat.widget.Toolbar
     lateinit var tvTitle: TextView
@@ -90,5 +108,160 @@ class DashboardActivity : BaseActivity() {
                 ).show()
             }
         }
+
+        if (requestCode == Constants.READ_STORAGE_PERMISSION_CODE) {
+
+            // Permission granted
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                // showErrorSnackBar("Storage permission granted.", false)
+                Constants.showImagePicker(this)
+            } else {
+
+                Toast.makeText(
+                    this,
+                    resources.getString(R.string.read_storage_permission_denied),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+
+        if (requestCode == Constants.CAMERA_PERMISSION_CODE) {
+
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                // showErrorSnackBar("Camera permission granted.", false)
+                Constants.takePhoto(this)
+            } else {
+
+                Toast.makeText(
+                    this,
+                    resources.getString(R.string.camera_permission_denied),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    override fun onDateSelected(year: Int, month: Int, day: Int) {
+
+        val newPartyFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_dashboard)
+            ?.childFragmentManager?.fragments?.get(0) as NewPartyFragment?
+
+        val date = "$day/${month + 1}/$year"
+
+        newPartyFragment?.let {
+
+            it.mSelectedDate = date
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    @Suppress("DEPRECATION")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+
+            if (requestCode == Constants.PICK_IMAGE_REQUEST_CODE) {
+
+                if (data != null) {
+
+                    try {
+
+                        val newPartyFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_dashboard)
+                            ?.childFragmentManager?.fragments?.get(0) as NewPartyFragment?
+
+                        newPartyFragment?.let {
+
+                            it.mSelectedImageFileUri = data.data!!
+
+                            GlideLoader(this).loadUserPicture(it.mSelectedImageFileUri!!, it.ivPartyPhoto)
+                        }
+
+                    } catch (e: IOException) {
+
+                        e.printStackTrace()
+                        Toast.makeText(
+                            this@DashboardActivity,
+                            resources.getString(R.string.image_selection_failed),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+
+            if (requestCode == Constants.CAMERA_REQUEST_CODE) {
+
+                val thumbnail: Bitmap = data!!.extras!!.get("data") as Bitmap
+
+                try {
+
+                    val newPartyFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_dashboard)
+                        ?.childFragmentManager?.fragments?.get(0) as NewPartyFragment?
+
+                    newPartyFragment?.let {
+
+                            it.mSelectedImageFileUri = getBitmapUri(applicationContext, thumbnail)!!
+
+                            GlideLoader(this).loadUserPicture(it.mSelectedImageFileUri!!, it.ivPartyPhoto)
+                    }
+
+                } catch (e: IOException) {
+
+                    e.printStackTrace()
+                    Toast.makeText(
+                        this@DashboardActivity,
+                        resources.getString(R.string.image_selection_failed),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        } else if (requestCode == Activity.RESULT_CANCELED) {
+
+            // A log is printed when the user closes or cancels the image selection.
+            Log.e("Request Canceled", "Image selection canceled")
+        }
+    }
+
+    private fun getBitmapUri(context: Context, bitmap: Bitmap): Uri? {
+
+        var imageUri: Uri? = null
+
+        try {
+
+            val file = File(context.externalCacheDir, "temp_image.png")
+            val outputStream: OutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            outputStream.flush()
+            outputStream.close()
+
+            val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension("png")
+            val values = ContentValues().apply {
+                put(MediaStore.Images.Media.DISPLAY_NAME, "temp_image")
+                put(MediaStore.Images.Media.MIME_TYPE, mimeType)
+                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/")
+            }
+
+            val contentResolver: ContentResolver = context.contentResolver
+            val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+            if (uri != null) {
+
+                val newOutputStream = contentResolver.openOutputStream(uri)
+                if (newOutputStream != null) {
+                    newOutputStream.write(file.readBytes())
+                    newOutputStream.close()
+                    imageUri = uri
+                }
+            }
+
+            // Notify the media scanner about the new image file
+            MediaScannerConnection.scanFile(context, arrayOf(file.absolutePath), null) { _, _ -> }
+
+        } catch (e: IOException) {
+
+            e.printStackTrace()
+        }
+        return imageUri
     }
 }

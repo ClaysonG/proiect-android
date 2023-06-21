@@ -2,12 +2,29 @@ package com.example.partyfinder.ui.fragments
 
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
 import java.util.Calendar
 
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
+
+    interface DateSelectionListener {
+        fun onDateSelected(year: Int, month: Int, day: Int)
+    }
+
+    private var dateSelectionListener: DateSelectionListener? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        try {
+            dateSelectionListener = context as DateSelectionListener
+        } catch (e: ClassCastException) {
+            throw ClassCastException("$context must implement DateSelectionListener")
+        }
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // Use the current date as the default date in the picker
@@ -22,6 +39,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
     }
 
     override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
-        // Do something with the date chosen by the user
+
+        dateSelectionListener?.onDateSelected(year, month, day)
     }
 }

@@ -81,4 +81,11 @@
 
     <string name="action_next">Next</string>
 
+    <string name="err_msg_select_party_image">Please select an image.</string>
+    <string name="err_msg_enter_party_name">Please enter party name.</string>
+    <string name="err_msg_select_party_date">Please select a date.</string>
+
+    <string name="title_activity_location_picker">LocationPickerActivity</string>
+    <string name="title_location_picker">Pick a location</string>
+
 </resources>

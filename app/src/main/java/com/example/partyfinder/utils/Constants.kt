@@ -33,6 +33,12 @@ object Constants {
 
     const val LOCATION_PERMISSION_REQUEST_CODE = 5
 
+    const val PARTY_DETAILS: String = "party_details"
+
+    const val PARTY_IMAGE: String = "image"
+    const val PARTY_NAME: String = "name"
+    const val PARTY_DATE: String = "date"
+
     fun showImagePicker(activity: Activity) {
 
         val galleryIntent = Intent(
