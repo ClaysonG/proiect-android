@@ -33,11 +33,15 @@ object Constants {
 
     const val LOCATION_PERMISSION_REQUEST_CODE = 5
 
+    const val PARTIES: String = "parties"
+
     const val PARTY_DETAILS: String = "party_details"
 
     const val PARTY_IMAGE: String = "image"
     const val PARTY_NAME: String = "name"
     const val PARTY_DATE: String = "date"
+
+    const val PARTY_PROFILE_IMAGE: String = "Party_Profile_Image"
 
     fun showImagePicker(activity: Activity) {
 

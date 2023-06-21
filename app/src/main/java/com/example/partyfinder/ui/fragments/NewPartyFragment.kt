@@ -14,20 +14,17 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.partyfinder.R
-import com.example.partyfinder.firestore.FirestoreClass
-import com.example.partyfinder.models.Party
 import com.example.partyfinder.ui.activities.DashboardActivity
-import com.example.partyfinder.ui.activities.EditUserProfileActivity
 import com.example.partyfinder.ui.activities.LocationPickerActivity
 import com.example.partyfinder.utils.Constants
 import com.example.partyfinder.utils.CustomButton
 import com.example.partyfinder.utils.CustomEditText
+import com.example.partyfinder.utils.CustomTextView
 
 @Suppress("DEPRECATION")
 class NewPartyFragment : Fragment(), View.OnClickListener {
@@ -37,9 +34,10 @@ class NewPartyFragment : Fragment(), View.OnClickListener {
     lateinit var ivPartyPhoto: ImageView
     private lateinit var etPartyName: CustomEditText
     private lateinit var btnDatePicker: CustomButton
+    lateinit var tvPartyDate: CustomTextView
 
     var mSelectedImageFileUri: Uri? = null
-    var mPartyName: String? = null
+    private var mPartyName: String? = null
     var mSelectedDate: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +58,7 @@ class NewPartyFragment : Fragment(), View.OnClickListener {
         ivPartyPhoto = root.findViewById(R.id.iv_party_photo)
         etPartyName = root.findViewById(R.id.et_party_name)
         btnDatePicker = root.findViewById(R.id.btn_pick_date)
+        tvPartyDate = root.findViewById(R.id.tv_party_date)
 
         ivPartyPhoto.setOnClickListener(this)
         btnDatePicker.setOnClickListener(this)

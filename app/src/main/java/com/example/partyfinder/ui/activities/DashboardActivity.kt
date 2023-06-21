@@ -153,6 +153,7 @@ class DashboardActivity : BaseActivity(), DatePickerFragment.DateSelectionListen
         newPartyFragment?.let {
 
             it.mSelectedDate = date
+            it.tvPartyDate.text = date
         }
     }
 

@@ -6,11 +6,13 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
 import androidx.fragment.app.Fragment
+import com.example.partyfinder.models.Party
 import com.example.partyfinder.ui.activities.LoginActivity
 import com.example.partyfinder.ui.activities.RegisterActivity
 import com.example.partyfinder.ui.activities.EditUserProfileActivity
 import com.example.partyfinder.models.User
 import com.example.partyfinder.ui.activities.DashboardActivity
+import com.example.partyfinder.ui.activities.LocationPickerActivity
 import com.example.partyfinder.ui.fragments.ProfileFragment
 import com.example.partyfinder.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
@@ -65,7 +67,38 @@ class FirestoreClass {
             }
     }
 
-    private fun getCurrentUserID(): String {
+    fun uploadParty(activity: Activity, partyInfo: Party) {
+
+        mFireStore.collection(Constants.PARTIES)
+            .add(partyInfo)
+            .addOnSuccessListener {
+
+                when (activity) {
+
+                    is LocationPickerActivity -> {
+
+                        activity.partyCreationSuccess()
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+
+                when (activity) {
+
+                    is LocationPickerActivity -> {
+
+                        activity.hideProgressDialog()
+                    }
+                }
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while creating the party.",
+                    e
+                )
+            }
+    }
+
+    fun getCurrentUserID(): String {
 
         val currentUser = FirebaseAuth.getInstance().currentUser
 
@@ -190,8 +223,23 @@ class FirestoreClass {
 
     fun uploadImageToCloudStorage(activity: Activity, imageFileURI: Uri?) {
 
+        var baseName = ""
+
+        when (activity) {
+
+            is EditUserProfileActivity -> {
+
+                baseName = Constants.USER_PROFILE_IMAGE
+            }
+
+            is LocationPickerActivity -> {
+
+                baseName = Constants.PARTY_PROFILE_IMAGE
+            }
+        }
+
         val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
-            Constants.USER_PROFILE_IMAGE + System.currentTimeMillis() + "." + Constants.getFileExtension(
+            baseName + System.currentTimeMillis() + "." + Constants.getFileExtension(
                 activity,
                 imageFileURI
             )
@@ -215,6 +263,11 @@ class FirestoreClass {
 
                         activity.imageUploadSuccess(uri.toString())
                     }
+
+                    is LocationPickerActivity -> {
+
+                        activity.imageUploadSuccess(uri.toString())
+                    }
                 }
             }
         }
@@ -223,6 +276,11 @@ class FirestoreClass {
                 when (activity) {
 
                     is EditUserProfileActivity -> {
+
+                        activity.hideProgressDialog()
+                    }
+
+                    is LocationPickerActivity -> {
 
                         activity.hideProgressDialog()
                     }

@@ -88,4 +88,6 @@
     <string name="title_activity_location_picker">LocationPickerActivity</string>
     <string name="title_location_picker">Pick a location</string>
 
+    <string name="err_msg_select_party_location">Please select a location.</string>
+
 </resources>
