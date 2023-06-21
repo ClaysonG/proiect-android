@@ -74,5 +74,6 @@
     <string name="take_a_picture">Take a Picture</string>
 
     <string name="camera_permission_denied">Oops, it looks like you denied the permission for camera. You can always grant it in the settings.</string>
+    <string name="location_permission_denied">Oops, it looks like you denied the permission for location. You can always grant it in the settings.</string>
 
 </resources>

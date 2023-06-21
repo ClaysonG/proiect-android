@@ -31,6 +31,8 @@ object Constants {
     const val CAMERA_PERMISSION_CODE = 3
     const val CAMERA_REQUEST_CODE = 4
 
+    const val LOCATION_PERMISSION_REQUEST_CODE = 5
+
     fun showImagePicker(activity: Activity) {
 
         val galleryIntent = Intent(

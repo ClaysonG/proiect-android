@@ -1,13 +1,18 @@
 package com.example.partyfinder.ui.activities
 
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.TextView
+import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.partyfinder.R
+import com.example.partyfinder.ui.fragments.MapFragment
+import com.example.partyfinder.utils.Constants
 
 class DashboardActivity : BaseActivity() {
 
@@ -50,6 +55,40 @@ class DashboardActivity : BaseActivity() {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setDisplayShowTitleEnabled(false)
+        }
+    }
+
+    // TODO: Check missing permissions, refactor code
+
+    @SuppressLint("MissingPermission")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == Constants.LOCATION_PERMISSION_REQUEST_CODE) {
+
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, update the map
+
+                val mapFragment = (supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_dashboard)
+                    ?.childFragmentManager?.fragments?.get(0) as MapFragment?)
+
+                mapFragment?.let {
+
+                    it.map.isMyLocationEnabled = true
+                    it.zoomToCurrentLocation()
+                }
+            } else {
+
+                Toast.makeText(
+                    this,
+                    resources.getString(R.string.location_permission_denied),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
     }
 }
