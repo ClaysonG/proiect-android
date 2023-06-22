@@ -22,6 +22,8 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.GroundOverlayOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
@@ -40,6 +42,12 @@ class MapFragment : Fragment() {
 
         val mapStyleOptions = context?.let { MapStyleOptions.loadRawResourceStyle(it, R.raw.map_style) }
         googleMap.setMapStyle(mapStyleOptions)
+
+        val newarkLatLng = LatLng(40.714086, -74.228697)
+        val newarkMap = GroundOverlayOptions()
+            .image(BitmapDescriptorFactory.fromResource(R.drawable.ic_party_placeholder))
+            .position(newarkLatLng, 8600f, 6500f)
+        map.addGroundOverlay(newarkMap)
 
         // val sydney = LatLng(-34.0, 151.0)
         // googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
