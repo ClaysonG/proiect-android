@@ -11,5 +11,6 @@ class Party (
     val address: String = "",
     val latitude: Double = 0.0,
     val longitude: Double = 0.0,
-    val createdBy: String = ""
+    val createdBy: String = "",
+    var id: String? = null
         ) : Parcelable

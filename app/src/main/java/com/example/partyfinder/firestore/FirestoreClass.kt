@@ -13,6 +13,8 @@ import com.example.partyfinder.ui.activities.EditUserProfileActivity
 import com.example.partyfinder.models.User
 import com.example.partyfinder.ui.activities.DashboardActivity
 import com.example.partyfinder.ui.activities.LocationPickerActivity
+import com.example.partyfinder.ui.fragments.HomeFragment
+import com.example.partyfinder.ui.fragments.MapFragment
 import com.example.partyfinder.ui.fragments.ProfileFragment
 import com.example.partyfinder.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
@@ -95,6 +97,51 @@ class FirestoreClass {
                     "Error while creating the party.",
                     e
                 )
+            }
+    }
+
+    fun getParties(activity: Activity, fragment: Fragment? = null) {
+
+        mFireStore.collection(Constants.PARTIES)
+            .get()
+            .addOnSuccessListener { document ->
+
+                Log.e("Parties List", document.documents.toString())
+
+                val partiesList: ArrayList<Party> = ArrayList()
+
+                for (i in document.documents) {
+
+                    val party = i.toObject(Party::class.java)!!
+                    party.id = i.id
+
+                    partiesList.add(party)
+                }
+
+                when (fragment) {
+
+                    is HomeFragment -> {
+
+                        fragment.successPartiesList(partiesList)
+                    }
+
+                    is MapFragment -> {
+
+                        fragment.successPartiesList(partiesList)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+
+                when (activity) {
+
+                    is DashboardActivity -> {
+
+                        activity.hideProgressDialog()
+                    }
+                }
+
+                Log.e("Get Parties List", "Error while getting parties list.", e)
             }
     }
 

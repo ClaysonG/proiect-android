@@ -8,9 +8,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.partyfinder.R
+import com.example.partyfinder.firestore.FirestoreClass
+import com.example.partyfinder.models.Party
 import com.example.partyfinder.ui.activities.DashboardActivity
 import com.example.partyfinder.utils.Constants
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -70,6 +73,27 @@ class MapFragment : Fragment() {
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
+
+        FirestoreClass().getParties(parentActivity, this)
+    }
+
+    fun successPartiesList(partyList: ArrayList<Party>) {
+
+        if (partyList.size > 0) {
+
+            for (i in partyList) {
+
+                val latLng = LatLng(i.latitude, i.longitude)
+                map.addMarker(MarkerOptions().position(latLng).title(i.name))
+            }
+        } else {
+
+            Toast.makeText(
+                requireActivity(),
+                "No parties found.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     override fun onResume() {
