@@ -177,7 +177,7 @@ class DashboardActivity : BaseActivity(), DatePickerFragment.DateSelectionListen
 
                             it.mSelectedImageFileUri = data.data!!
 
-                            GlideLoader(this).loadUserPicture(it.mSelectedImageFileUri!!, it.ivPartyPhoto)
+                            GlideLoader(this).loadPicture(it.mSelectedImageFileUri!!, it.ivPartyPhoto)
                         }
 
                     } catch (e: IOException) {
@@ -205,7 +205,7 @@ class DashboardActivity : BaseActivity(), DatePickerFragment.DateSelectionListen
 
                             it.mSelectedImageFileUri = getBitmapUri(applicationContext, thumbnail)!!
 
-                            GlideLoader(this).loadUserPicture(it.mSelectedImageFileUri!!, it.ivPartyPhoto)
+                            GlideLoader(this).loadPicture(it.mSelectedImageFileUri!!, it.ivPartyPhoto)
                     }
 
                 } catch (e: IOException) {

@@ -102,7 +102,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
 
         parentActivity.hideProgressDialog()
 
-        this@ProfileFragment.context?.let { GlideLoader(it).loadUserPicture(user.image, ivUserPhoto) }
+        this@ProfileFragment.context?.let { GlideLoader(it).loadPicture(user.image, ivUserPhoto) }
 
         tvName.text = "${user.firstName} ${user.lastName}"
         tvGender.text = user.gender

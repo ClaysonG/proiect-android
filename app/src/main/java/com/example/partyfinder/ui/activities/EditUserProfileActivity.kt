@@ -85,7 +85,7 @@ class EditUserProfileActivity : BaseActivity(), View.OnClickListener {
 
             // setupActionBar()
 
-            GlideLoader(this@EditUserProfileActivity).loadUserPicture(Uri.parse(mUserDetails.image), ivUserPhoto)
+            GlideLoader(this@EditUserProfileActivity).loadPicture(Uri.parse(mUserDetails.image), ivUserPhoto)
 
             if (mUserDetails.mobile != 0L) {
                 etPhoneNumber.setText(mUserDetails.mobile.toString())
@@ -267,7 +267,7 @@ class EditUserProfileActivity : BaseActivity(), View.OnClickListener {
                         mSelectedImageFileUri = data.data!!
 
                         // ivUserPhoto.setImageURI(selectedImageFileUri)
-                        GlideLoader(this).loadUserPicture(mSelectedImageFileUri!!, ivUserPhoto)
+                        GlideLoader(this).loadPicture(mSelectedImageFileUri!!, ivUserPhoto)
                     } catch (e: IOException) {
 
                         e.printStackTrace()
@@ -289,7 +289,7 @@ class EditUserProfileActivity : BaseActivity(), View.OnClickListener {
 
                     mSelectedImageFileUri = getBitmapUri(applicationContext, thumbnail)!!
 
-                    GlideLoader(this).loadUserPicture(mSelectedImageFileUri!!, ivUserPhoto)
+                    GlideLoader(this).loadPicture(mSelectedImageFileUri!!, ivUserPhoto)
                 } catch (e: IOException) {
 
                     e.printStackTrace()

@@ -90,4 +90,8 @@
 
     <string name="err_msg_select_party_location">Please select a location.</string>
 
+    <string name="item_party_name">Party name</string>
+    <string name="item_party_address">Party address</string>
+    <string name="item_party_date">Party date</string>
+
 </resources>

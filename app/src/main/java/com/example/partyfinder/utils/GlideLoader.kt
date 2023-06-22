@@ -1,7 +1,6 @@
 package com.example.partyfinder.utils
 
 import android.content.Context
-import android.net.Uri
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.example.partyfinder.R
@@ -9,7 +8,7 @@ import java.io.IOException
 
 class GlideLoader(val context: Context) {
 
-    fun loadUserPicture(image: Any, imageView: ImageView) {
+    fun loadPicture(image: Any, imageView: ImageView) {
 
         try {
 
