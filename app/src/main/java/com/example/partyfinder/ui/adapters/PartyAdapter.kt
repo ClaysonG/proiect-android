@@ -1,3 +1,4 @@
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,14 @@ import com.example.partyfinder.utils.CustomTextView
 import com.example.partyfinder.utils.CustomTextViewBold
 import com.example.partyfinder.utils.GlideLoader
 
-class PartyAdapter(private val partyList: List<Party>) :
+class PartyAdapter(private val partyList: ArrayList<Party>) :
     RecyclerView.Adapter<PartyAdapter.PartyViewHolder>() {
+
+    private var filteredList = ArrayList<Party>()
+
+    init {
+        filteredList.addAll(partyList)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PartyViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -19,12 +26,12 @@ class PartyAdapter(private val partyList: List<Party>) :
     }
 
     override fun onBindViewHolder(holder: PartyViewHolder, position: Int) {
-        val party = partyList[position]
+        val party = filteredList[position]
         holder.bind(party)
     }
 
     override fun getItemCount(): Int {
-        return partyList.size
+        return filteredList.size
     }
 
     inner class PartyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -45,5 +52,13 @@ class PartyAdapter(private val partyList: List<Party>) :
             partyAddressTextView.text = party.address
             partyDateTextView.text = party.date
         }
+    }
+
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun filterList(filteredList: ArrayList<Party>) {
+
+        this.filteredList = filteredList
+        notifyDataSetChanged()
     }
 }
