@@ -1,5 +1,6 @@
 package com.example.partyfinder.ui.activities
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.CheckBox
@@ -29,6 +30,8 @@ class RegisterActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
 
         tvLogin = findViewById(R.id.tv_login)
         tbRegister = findViewById(R.id.toolbar_register_activity)

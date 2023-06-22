@@ -1,6 +1,11 @@
 package com.example.partyfinder.ui.activities
 
+import android.animation.ArgbEvaluator
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
+import android.graphics.Color
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
@@ -37,9 +42,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     private lateinit var googleSignInClient: GoogleSignInClient
 
+    private lateinit var colorAnimator: ObjectAnimator
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
         checkLoginStatus()
 
         setContentView(R.layout.activity_login)
@@ -56,6 +63,25 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         btnLogin.setOnClickListener(this)
         tvRegister.setOnClickListener(this)
         btnGoogleLogin.setOnClickListener(this)
+
+        colorAnimator = ObjectAnimator.ofObject(
+            btnLogin,
+            "backgroundColor",
+            ArgbEvaluator(),
+            Color.BLUE,
+            Color.RED
+        )
+
+        colorAnimator.duration = 1000
+
+        colorAnimator.repeatCount = ValueAnimator.INFINITE
+        colorAnimator.repeatMode = ValueAnimator.REVERSE
+
+        // Add an update listener to handle color changes during animation
+        colorAnimator.addUpdateListener {
+            val animatedValue = it.animatedValue as Int
+            btnLogin.setBackgroundColor(animatedValue)
+        }
 
         loadVideo()
     }
@@ -95,11 +121,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     override fun onResume() {
         super.onResume()
         vvLogin.start()
+        colorAnimator.start()
     }
 
     override fun onPause() {
         super.onPause()
         vvLogin.pause()
+        colorAnimator.pause()
     }
 
     override fun onStop() {

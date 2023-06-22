@@ -1,5 +1,6 @@
 package com.example.partyfinder.ui.activities
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.widget.Toast
 import com.example.partyfinder.R
@@ -16,6 +17,8 @@ class ForgotPasswordActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_password)
+
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
 
         tbForgotPassword = findViewById(R.id.toolbar_forgot_password_activity)
         etEmailForgotPassword = findViewById(R.id.et_email_forgot_password)
