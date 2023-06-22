@@ -33,7 +33,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 class LoginActivity : BaseActivity(), View.OnClickListener {
 
     private lateinit var tvRegister : CustomTextViewBold
-    private lateinit var vvLogin: VideoView
+    private var vvLogin: VideoView? = null
     private lateinit var etEmail: CustomEditText
     private lateinit var etPassword: CustomEditText
     private lateinit var tvForgotPassword: CustomTextView
@@ -89,8 +89,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     private fun loadVideo() {
 
         val videoPath = "android.resource://" + packageName + "/" + R.raw.party
-        vvLogin.setVideoURI(Uri.parse(videoPath))
-        vvLogin.setOnPreparedListener{ mediaPlayer ->
+        vvLogin?.setVideoURI(Uri.parse(videoPath))
+        vvLogin?.setOnPreparedListener{ mediaPlayer ->
             val videoWidth = mediaPlayer.videoWidth
             val videoHeight = mediaPlayer.videoHeight
 
@@ -99,40 +99,40 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             val screenHeight = resources.displayMetrics.heightPixels
             val screenProportion = screenWidth.toFloat() / screenHeight.toFloat()
 
-            val lp = vvLogin.layoutParams
+            val lp = vvLogin?.layoutParams
 
             if (videoProportion > screenProportion) {
-                lp.width = screenWidth
-                lp.height = (screenWidth / videoProportion).toInt()
+                lp?.width = screenWidth
+                lp?.height = (screenWidth / videoProportion).toInt()
             } else {
-                lp.width = (videoProportion * screenHeight).toInt()
-                lp.height = screenHeight
+                lp?.width = (videoProportion * screenHeight).toInt()
+                lp?.height = screenHeight
             }
 
-            vvLogin.layoutParams = lp
+            vvLogin?.layoutParams = lp
         }
-        vvLogin.start()
+        vvLogin?.start()
 
-        vvLogin.setOnCompletionListener { mediaPlayer ->
+        vvLogin?.setOnCompletionListener { mediaPlayer ->
             mediaPlayer.start()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        vvLogin.start()
+        vvLogin?.start()
         colorAnimator.start()
     }
 
     override fun onPause() {
         super.onPause()
-        vvLogin.pause()
+        vvLogin?.pause()
         colorAnimator.pause()
     }
 
     override fun onStop() {
         super.onStop()
-        vvLogin.stopPlayback()
+        vvLogin?.stopPlayback()
     }
 
     override fun onClick(view: View?) {
