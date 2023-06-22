@@ -1,4 +1,5 @@
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,9 +52,26 @@ class PartyAdapter(private val partyList: ArrayList<Party>) :
             partyNameTextView.text = party.name
             partyAddressTextView.text = party.address
             partyDateTextView.text = party.date
+
+            itemView.findViewById<ImageView>(R.id.iv_share).setOnClickListener {
+
+                shareParty(party.name)
+            }
+        }
+
+        private fun shareParty(partyName: String) {
+
+            val shareText = "Check out this party I found on PartyFinder: $partyName"
+
+            val sendIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, shareText)
+                type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            itemView.context.startActivity(shareIntent)
         }
     }
-
 
     @SuppressLint("NotifyDataSetChanged")
     fun filterList(filteredList: ArrayList<Party>) {
